@@ -1,29 +1,16 @@
-const TelegramBot = require('node-telegram-bot-api');
+const bot = require('./connection');
 
-const token = "2050431990:AAEWD2fihGVg2ElaDJg6A88bWEwg6f5hjEs";
-
-const bot = new TelegramBot(token, {polling: true});
-
-bot.on('message', (msg) =>{
-    var hi = 'hi';
-    if(msg.text.toString().toLowerCase().indexOf(hi) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello dear user");
-    }
-
-    var bye = 'bye';
-    if(msg.text.toString().toLowerCase().includes(bye)){
-        bot.sendMessage(msg.chat.id, "Hope to see you around again, Bye!!")
-    }
-})
+const replyMsges = require('./controller/salt');
+bot.on('message', replyMsges);
 
 // to see the more details about the error
 bot.on("polling_error", (err)=>console.log(err));
 
 //set commands
-bot.onText(/\/start/, (msg)=>{
-    bot.sendMessage(msg.chat.id, "Welcome to Hi_Math!!")
-});
+const welcome = require('./controller/commands').welcome;
+bot.onText(/\/start/, welcome);
 
-bot.onText(/\/sendpic/, (msg)=>{
-    bot.sendPhoto(msg.chat.id, "https://images4.alphacoders.com/282/282628.jpg", {caption: "(:Sending <<-->> Gratitude:) ! \nRegards, \nRavina"})
-})
+const pic = require('./controller/commands').pic;
+bot.onText(/\/sendpic/, pic);
+
+// bot.on.
